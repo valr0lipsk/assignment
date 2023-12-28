@@ -20,6 +20,9 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
     SALT_KEY: z.string(),
+    AWS_SSO_REGION: z.string(),
+    AWS_ACCESS_KEY_ID: z.string(),
+    AWS_SECRET_ACCESS_KEY: z.string(),
   },
 
   /**
@@ -41,6 +44,9 @@ export const env = createEnv({
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     SALT_KEY: process.env.SALT_KEY,
+    AWS_SSO_REGION: process.env.AWS_SSO_REGION,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

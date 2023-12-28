@@ -12,6 +12,11 @@
   "dependencies": {
     "@auth/core": "^0.18.2",
     "@auth/drizzle-adapter": "^0.3.7",
+    "@aws-sdk/client-s3": "^3.481.0",
+    "@aws-sdk/credential-providers": "^3.481.0",
+    "@aws-sdk/s3-request-presigner": "^3.481.0",
+    "@aws-sdk/signature-v4-multi-region": "^3.481.0",
+    "@aws-sdk/types": "^3.468.0",
     "@hookform/resolvers": "^3.3.2",
     "@neondatabase/serverless": "^0.6.0",
     "@t3-oss/env-nextjs": "^0.7.0",
