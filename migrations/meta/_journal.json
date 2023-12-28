@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1703751540646,
+      "tag": "0000_hot_mulholland_black",
+      "breakpoints": true
+    }
+  ]
+}
