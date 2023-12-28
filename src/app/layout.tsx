@@ -24,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${montserrat.variable} no-scrollbar min-h-screen bg-[url('/assets/background.png')] bg-cover bg-bottom`}
+        className={`${montserrat.variable} no-scrollbar bg-[url('/assets/background.png')] bg-cover bg-bottom font-montserrat text-white`}
       >
         <TRPCReactProvider>
-          <NextAuthProvider>{children}</NextAuthProvider>
+          <NextAuthProvider>
+            <div className="h-screen p-[7.5rem]">{children}</div>
+          </NextAuthProvider>
         </TRPCReactProvider>
       </body>
     </html>

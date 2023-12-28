@@ -13,12 +13,21 @@ export default {
         montserrat: ["var(--font-montserrat)", ...fontFamily.sans],
       },
       colors: {
-        pink: {
-          500: "#FF31A1",
+        teal: {
+          500: "#224957",
+        },
+        green: {
+          400: "#2BD17E",
         },
         black: {
           900: "#191919",
         },
+        sky: {
+          900: "#092C39",
+        },
+      },
+      borderRadius: {
+        l10: "0.625rem",
       },
     },
   },
