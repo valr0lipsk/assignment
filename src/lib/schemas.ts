@@ -18,7 +18,7 @@ export type SignInSchemaType = z.infer<typeof SignInSchema>;
 
 export type SignInFormSchemaType = z.infer<typeof SignInFormSchema>;
 
-export const MovieAddSchema = z.object({
+const MovieFormSchema = z.object({
   title: z.string().min(3, { message: "Should contain at least 3 characters" }),
   publishYear: z
     .string()
@@ -33,18 +33,20 @@ export const MovieAddSchema = z.object({
         message: "Year can't be greater than 2024",
       },
     ),
+});
+
+export const MovieAddSchema = MovieFormSchema.extend({
   file: z
     .any()
     .refine(
-      (files: File[]) => {
-        return files.length > 0;
+      (files: File) => {
+        return !!files;
       },
       {
         message: "Poster is required",
       },
     )
     .refine(
-      // file can be empty to save prev file
       (files: File[]) => {
         let fileNameSplitted, fileType;
         const file = files?.length > 0 ? files[0] : null;
@@ -62,6 +64,27 @@ export const MovieAddSchema = z.object({
 });
 
 export type MovieAddSchemaType = z.infer<typeof MovieAddSchema>;
+
+export const MovieEditSchema = MovieFormSchema.extend({
+  file: z.any().refine(
+    // file can be empty to save prev file
+    (files: File[]) => {
+      let fileNameSplitted, fileType;
+      const file = files?.length > 0 ? files[0] : null;
+
+      if (file) {
+        fileNameSplitted = file.name.split(".");
+        fileType = fileNameSplitted[fileNameSplitted.length - 1];
+      }
+      return !file || (!!file && (fileType === "jpg" || fileType === "png"));
+    },
+    {
+      message: "Only .jpg and .png files are allowed to be attached.",
+    },
+  ),
+});
+
+export type MovieEditSchemaType = z.infer<typeof MovieEditSchema>;
 
 export const MovieSchema = z.object({
   id: z.string().min(1),

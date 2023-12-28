@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { type UseFormRegister, type UseFormSetValue } from "react-hook-form";
 import UploadIcon from "../icons/upload";
+import { useDropzone } from "react-dropzone";
 
 interface InputProps {
   placeholder?: string;
@@ -20,40 +21,38 @@ const FileInput = ({
   name,
   error,
   setValue,
+  preSelectedFileName,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [displayedTitle, setDisplayedTitle] =
-    useState<string>("Drop an image here");
+  const [displayedTitle, setDisplayedTitle] = useState<string>(
+    preSelectedFileName
+      ? preSelectedFileName
+      : "Drag and drop files here or click to browse.",
+  );
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      console.log(acceptedFiles);
+      setValue("file", acceptedFiles[0]);
 
-  const handleClick = () => {
-    inputRef.current?.click();
-  };
-
-  useEffect(() => {
-    setValue("file", inputRef.current?.files);
-
-    if (
-      inputRef.current?.files &&
-      inputRef.current.files.length > 0 &&
-      inputRef.current.files[0]
-    ) {
-      setDisplayedTitle(inputRef.current.files[0].name);
-    } else {
-      setDisplayedTitle("Drop an image here");
-    }
-  }, [inputRef.current?.files, setValue, inputRef.current?.files?.[0]]);
+      if (acceptedFiles[0]?.name) {
+        setDisplayedTitle(acceptedFiles[0]?.name);
+      } else setDisplayedTitle("Drag and drop files here or click to browse.");
+    },
+  });
 
   return (
-    <>
+    <div className="relative" {...getRootProps()}>
+      {error && (
+        <p className="font-inter absolute ml-2 mt-2 flex text-xs font-normal text-red-500">
+          {error}
+        </p>
+      )}
       <div
         className={`font-inter flex flex-col rounded border border-dashed border-neutral-200 bg-teal-500 p-3 text-sm font-normal transition-colors duration-150 focus:border-indigo-600 focus:outline-none ${
           className ?? ""
         }`}
       >
-        <button
-          className="m-auto flex flex-col items-center text-white"
-          onClick={handleClick}
-        >
+        <button className="m-auto flex flex-col items-center text-white">
           <UploadIcon className="mb-2" />
           {displayedTitle}
         </button>
@@ -63,13 +62,9 @@ const FileInput = ({
         type="file"
         className="hidden"
         ref={inputRef}
+        {...getInputProps()}
       />
-      {error && (
-        <p className="font-inter mt-2 flex text-xs font-normal text-red-500">
-          {error}
-        </p>
-      )}
-    </>
+    </div>
   );
 };
 

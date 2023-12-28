@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import FileInput from "./FileInput";
 import {
   MovieAddSchema,
-  MovieSchemaType,
+  type MovieSchemaType,
   type MovieAddSchemaType,
 } from "~/lib/schemas";
 import InputWrapper from "./InputWrapper";
@@ -29,19 +29,16 @@ const MovieForm = () => {
   const router = useRouter();
   const utils = trpcNext.useContext();
 
-  const getAllQuery = api.movie.getAll.useQuery();
-
   const addMovieMutation = api.movie.add.useMutation({
-    onSuccess: async () => {
+    onSuccess: () => {
       router.push("/movies");
-      await getAllQuery.refetch();
     },
   });
 
   const handleFormSubmit = async () => {
     const val: MovieAddSchemaType = getValues();
 
-    const file = (val.file as File[])[0];
+    const file = val.file as File;
 
     if (file) {
       const url = await utils.s3.getS3AnimationUploadUrl.fetch(file.name);

@@ -1,4 +1,4 @@
-import MovieForm from "~/app/components/MovieForm";
+import MovieForm from "~/app/components/AddMovieForm";
 
 export default function AddMovie() {
   return (
