@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { type UseFormRegister, type UseFormSetValue } from "react-hook-form";
 import UploadIcon from "../icons/upload";
 
@@ -22,6 +22,8 @@ const FileInput = ({
   setValue,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [displayedTitle, setDisplayedTitle] =
+    useState<string>("Drop an image here");
 
   const handleClick = () => {
     inputRef.current?.click();
@@ -29,7 +31,17 @@ const FileInput = ({
 
   useEffect(() => {
     setValue("file", inputRef.current?.files);
-  }, [inputRef.current?.files]);
+
+    if (
+      inputRef.current?.files &&
+      inputRef.current.files.length > 0 &&
+      inputRef.current.files[0]
+    ) {
+      setDisplayedTitle(inputRef.current.files[0].name);
+    } else {
+      setDisplayedTitle("Drop an image here");
+    }
+  }, [inputRef.current?.files, setValue, inputRef.current?.files?.[0]]);
 
   return (
     <>
@@ -43,7 +55,7 @@ const FileInput = ({
           onClick={handleClick}
         >
           <UploadIcon className="mb-2" />
-          Drop an image here
+          {displayedTitle}
         </button>
       </div>
       <input

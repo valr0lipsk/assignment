@@ -3,24 +3,67 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import FileInput from "./FileInput";
-import { MovieSchema, type MovieSchemaType } from "~/lib/schemas";
+import {
+  MovieAddSchema,
+  MovieSchemaType,
+  type MovieAddSchemaType,
+} from "~/lib/schemas";
 import InputWrapper from "./InputWrapper";
 import Input from "./Input";
+import { api } from "~/trpc/react";
+import { trpcNext } from "~/trpc/next";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const MovieForm = () => {
   const {
     register,
     getValues,
-    reset,
-    watch,
     setValue,
-    formState: { errors, isSubmitting, isDirty, isValid },
-  } = useForm<MovieSchemaType>({
-    resolver: zodResolver(MovieSchema),
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<MovieAddSchemaType>({
+    resolver: zodResolver(MovieAddSchema),
   });
 
+  const router = useRouter();
+
+  const addMovieMutation = api.movie.add.useMutation({
+    onSuccess: () => {
+      router.push("/movies");
+    },
+  });
+  const utils = trpcNext.useContext();
+
+  const handleFormSubmit = async () => {
+    const val: MovieAddSchemaType = getValues();
+
+    const file = (val.file as File[])[0];
+
+    if (file) {
+      const url = await utils.s3.getS3AnimationUploadUrl.fetch(file.name);
+
+      const upload = await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": "application/fbx" },
+      });
+
+      if (upload.ok) {
+        const movie: MovieSchemaType = {
+          id: crypto.randomUUID(),
+          posterLink: file.name,
+          title: val.title,
+          publishYear: val.publishYear,
+        };
+
+        addMovieMutation.mutate(movie);
+      }
+    }
+  };
+
   return (
-    <form className="flex">
+    <form className="flex" onSubmit={handleSubmit(handleFormSubmit)}>
       <FileInput
         register={register}
         name="file"
@@ -55,15 +98,14 @@ const MovieForm = () => {
         </InputWrapper>
 
         <div className="mt-16 flex gap-4">
-          <button
-            className="rounded-l10 w-full border border-white  bg-transparent py-4 disabled:opacity-70"
-            type="submit"
-            disabled={isSubmitting}
+          <Link
+            className="w-full rounded-l10 border border-white  bg-transparent py-4 text-center disabled:opacity-70"
+            href="/movies"
           >
             Cancel
-          </button>
+          </Link>
           <button
-            className="rounded-l10 w-full border border-green-400 bg-green-400 py-4 disabled:opacity-70"
+            className="w-full rounded-l10 border border-green-400 bg-green-400 py-4 disabled:opacity-70"
             type="submit"
             disabled={isSubmitting}
           >

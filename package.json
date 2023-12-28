@@ -22,7 +22,7 @@
     "@t3-oss/env-nextjs": "^0.7.0",
     "@tanstack/react-query": "^4.32.6",
     "@trpc/client": "^10.37.1",
-    "@trpc/next": "^10.37.1",
+    "@trpc/next": "^10.45.0",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
     "drizzle-orm": "^0.29.0",
@@ -31,6 +31,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
+    "react-toastify": "^9.1.3",
     "superjson": "^2.2.1",
     "zod": "^3.22.4"
   },

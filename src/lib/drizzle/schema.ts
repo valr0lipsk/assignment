@@ -1,4 +1,4 @@
-import { date, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const UserTable = pgTable("user", {
   id: uuid("id").notNull().primaryKey(),
@@ -9,6 +9,9 @@ export const UserTable = pgTable("user", {
 export const MovieTable = pgTable("movie", {
   id: uuid("id").notNull().primaryKey(),
   title: text("title").notNull(),
-  publishingYear: date("publishingYear").notNull().defaultNow(),
+  publishingYear: text("publishingYear").notNull(),
   posterLink: text("posterLink").notNull(),
+  user_id: uuid("user_id")
+    .notNull()
+    .references(() => UserTable.id, { onDelete: "cascade" }),
 });
