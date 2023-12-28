@@ -8,10 +8,15 @@ export const SignInSchema = z.object({
     .min(1, { message: "Email is required" })
     .regex(emailRegex, { message: "Enter a valid email address" }),
   password: z.string().min(1, { message: "Password is required" }),
-  rememberMe: z.literal<boolean>(true),
+});
+
+export const SignInFormSchema = SignInSchema.extend({
+  rememberMe: z.boolean(),
 });
 
 export type SignInSchemaType = z.infer<typeof SignInSchema>;
+
+export type SignInFormSchemaType = z.infer<typeof SignInFormSchema>;
 
 export const MovieAddSchema = z.object({
   title: z.string().min(3, { message: "Should contain at least 3 characters" }),

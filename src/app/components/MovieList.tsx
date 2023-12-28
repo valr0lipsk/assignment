@@ -28,19 +28,24 @@ const MovieList = ({ movies }: { movies: Movie[] }) => {
       </div>
 
       <div className="grid grid-cols-4 gap-6">
-        <div className="rounded-xl bg-sky-900 p-2">
-          <Image
-            alt="alt"
-            height={400}
-            width={200}
-            className="mb-4"
-            src="/assets/background"
-          />
+        {movies.map((e) => (
+          <div key={e.id} className="rounded-xl bg-sky-900 p-2">
+            <Image
+              alt="alt"
+              height={400}
+              width={200}
+              className="mb-4 h-[400px] w-full"
+              src={
+                `/api/s3/getS3Url?` +
+                new URLSearchParams({ path: e.posterLink }).toString()
+              }
+            />
 
-          <p className="mb-2 px-2 text-xl font-medium">Movie 1</p>
+            <p className="mb-2 px-2 text-xl font-medium">{e.title}</p>
 
-          <p className="mb-2 px-2 text-sm">2021</p>
-        </div>
+            <p className="mb-2 px-2 text-sm">{e.publishingYear}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

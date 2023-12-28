@@ -27,13 +27,16 @@ const MovieForm = () => {
   });
 
   const router = useRouter();
+  const utils = trpcNext.useContext();
+
+  const getAllQuery = api.movie.getAll.useQuery();
 
   const addMovieMutation = api.movie.add.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       router.push("/movies");
+      await getAllQuery.refetch();
     },
   });
-  const utils = trpcNext.useContext();
 
   const handleFormSubmit = async () => {
     const val: MovieAddSchemaType = getValues();

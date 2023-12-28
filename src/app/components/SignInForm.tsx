@@ -1,22 +1,35 @@
 "use client";
 
-import { SignInSchema, type SignInSchemaType } from "~/lib/schemas";
+import { SignInFormSchema, type SignInFormSchemaType } from "~/lib/schemas";
 import Input from "./Input";
 import InputWrapper from "./InputWrapper";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignInSchemaType>({
-    resolver: zodResolver(SignInSchema),
+  } = useForm<SignInFormSchemaType>({
+    resolver: zodResolver(SignInFormSchema),
   });
 
-  const handleFormSubmit = (val: SignInSchemaType) => {
-    console.log(val);
+  const router = useRouter();
+
+  const handleFormSubmit = async (val: SignInFormSchemaType) => {
+    try {
+      const res = await signIn("credentials", { ...val, redirect: false });
+
+      if (res?.error) alert(res.error);
+      else if (res?.ok) {
+        router.push("/movies");
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -53,7 +66,7 @@ const SignInForm = () => {
       </label>
 
       <button
-        className="rounded-l10 w-full bg-green-400 py-4 disabled:opacity-70"
+        className="w-full rounded-l10 bg-green-400 py-4 disabled:opacity-70"
         type="submit"
         disabled={isSubmitting}
       >
