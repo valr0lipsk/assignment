@@ -23,7 +23,7 @@ jobs:
 
       - name: create env file
         env:
-          NEXTAUTH_URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+          NEXTAUTH_URL: "http://localhost:3001"
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SALT_KEY: ${{ secrets.SALT_KEY }}
