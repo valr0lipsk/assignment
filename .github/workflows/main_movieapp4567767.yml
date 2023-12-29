@@ -23,6 +23,7 @@ jobs:
 
       - name: create env file
         env:
+          NEXTAUTH_URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SALT_KEY: ${{ secrets.SALT_KEY }}
@@ -37,6 +38,7 @@ jobs:
           echo AWS_SSO_REGION=$AWS_SSO_REGION >> .env
           echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> .env
           echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> .env
+          echo NEXTAUTH_URL=$NEXTAUTH_URL >> .env
           echo NODE_ENV=development >> .env
 
       - name: npm install, build, and test
