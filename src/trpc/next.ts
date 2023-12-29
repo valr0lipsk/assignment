@@ -1,11 +1,12 @@
 import { createTRPCNext } from "@trpc/next";
 import { httpBatchLink } from "@trpc/react-query";
-import { getBaseUrl } from "./shared";
+import { getBaseUrl, transformer } from "./shared";
 import { type AppRouter } from "~/server/api/root";
 
 export const trpcNext = createTRPCNext<AppRouter>({
   config() {
     return {
+      transformer,
       queryClientConfig: {
         defaultOptions: {
           queries: {
