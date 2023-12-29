@@ -23,7 +23,7 @@ jobs:
 
       - name: create env file
         env:
-          NEXTAUTH_URL: "http://localhost:3001"
+          NEXTAUTH_URL: "https://movieapp4567767.azurewebsites.net/"
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SALT_KEY: ${{ secrets.SALT_KEY }}
